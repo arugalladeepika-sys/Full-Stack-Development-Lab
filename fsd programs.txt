@@ -1,0 +1,65 @@
+// server.js
+import http from 'http';
+
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.write("<h1>My Server</h1>");
+    res.write("<p>This is response from server</p>");
+    res.end();
+});
+
+server.listen(3000, () => {
+    console.log("Server running at http://localhost:3000");
+});
+
+
+
+//file.js
+import fs from 'fs';
+const data = "Hello this is my operations file on operation";
+fs.writeFileSync("sample.txt", data, "utf-8");
+
+const readData = fs.readFileSync("sample.txt", "utf-8");
+console.log(readData);
+fs.appendFileSync("sample.txt", "\n This is my append line", "utf-8");
+
+const updatedData = fs.readFileSync("sample.txt", "utf-8");
+console.log(updatedData);
+
+//fs.unlinkSync("sample.txt");
+
+//asynFile.js
+import fs from 'fs';
+
+const data = 'Hello this is my operations file on operation';
+
+// 1) Asynchronous writeFile
+fs.writeFile('sample.txt', data, 'utf-8', (err) => {
+    if (err) return console.error('writeFile failed:', err);
+    console.log('1) writeFile completed');
+
+    // 2) Asynchronous readFile
+    fs.readFile('sample.txt', 'utf-8', (readErr, content) => {
+        if (readErr) return console.error('readFile failed:', readErr);
+        console.log('2) readFile content:');
+        console.log(content);
+
+        // 3) Asynchronous appendFile
+        fs.appendFile('sample.txt', '\nThis is my append line', 'utf-8', (appendErr) => {
+            if (appendErr) return console.error('appendFile failed:', appendErr);
+            console.log('3) appendFile completed');
+
+            // 4) Asynchronous rename
+            fs.rename('sample.txt', 'sample-renamed.txt', (renameErr) => {
+                if (renameErr) return console.error('rename failed:', renameErr);
+                console.log('4) rename completed');
+
+                // 5) Asynchronous unlink (delete)
+                fs.unlink('sample-renamed.txt', (unlinkErr) => {
+                    if (unlinkErr) return console.error('unlink failed:', unlinkErr);
+                    console.log('5) unlink completed');
+                });
+            });
+        });
+    });
+});

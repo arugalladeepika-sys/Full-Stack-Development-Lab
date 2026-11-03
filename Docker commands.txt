@@ -1,0 +1,126 @@
+C:\Users\Arugalla Deepika>docker run -d --name mongodb -p 27017:27017 ^
+More? -e MONGO_INITDB_ROOT_USERNAME=admin ^
+More? -e MONGO_INITDB_ROOT_PASSWORD=admin123 ^
+More? -v mongodb_data:/data/db ^
+More? mongo:8.0
+Unable to find image 'mongo:8.0' locally
+8.0: Pulling from library/mongo
+eedb5e3e5b38: Pull complete
+59898ec81c6b: Pull complete
+08f85ec03d22: Pull complete
+cfbbec1d5328: Pull complete
+c4a88db82a6d: Pull complete
+a60ef8ec184e: Pull complete
+2252b895f5de: Pull complete
+f97373a3dd33: Pull complete
+b45570b54f6f: Download complete
+15035395e153: Download complete
+Digest: sha256:d0d926f94df099bff534b7ee5b5986458131a22489dfff8664509af0c1e2ca9c
+Status: Downloaded newer image for mongo:8.0
+7275bcc0c6eaa1d8073dbf0adaafdcb8a249f4456f77fcb1e52ff011f883d50f
+
+
+C:\Users\Arugalla Deepika>docker ps
+CONTAINER ID   IMAGE       COMMAND                  CREATED          STATUS          PORTS                                             NAMES
+7275bcc0c6ea   mongo:8.0   "docker-entrypoint.s…"   18 minutes ago   Up 18 minutes   0.0.0.0:27017->27017/tcp, [::]:27017->27017/tcp   mongodb
+
+C:\Users\Arugalla Deepika>docker exec -it mongodb mongosh -u admin -p admin123
+Current Mongosh Log ID: 6ac4f84a34e9b84e5b3ecdb7
+Connecting to:          mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.12.0
+Using MongoDB:          8.0.32
+Using Mongosh:          2.12.0
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+
+To help improve our products, pseudo-anonymous usage data is collected from interactive and agentic sessions only, and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2026-10-06T12:44:04.290+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2026-10-06T12:44:04.948+00:00: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+   2026-10-06T12:44:04.948+00:00: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+   2026-10-06T12:44:04.948+00:00: We suggest setting the contents of sysfsFile to 0.
+   2026-10-06T12:44:04.948+00:00: We suggest setting swappiness to 0 or 1, as swapping can cause performance problems.
+------
+
+test> show dbs
+admin   100.00 KiB
+config   12.00 KiB
+local    72.00 KiB
+
+test> use booksDB
+switched to db booksDB
+
+booksDB> db.books.insertOne({
+| title: "The Great Gatsby",
+| author: "F. Scott Fitxgerald",
+| catagory: "classic",
+| price: 299.99
+| })
+{
+  acknowledged: true,
+  insertedId: ObjectId('6ac4f90134e9b84e5b3ecdb8')
+
+booksDB> db.books.insertMany([
+|   { title: "1984", author: "George Orwell", category: "Dystopian", price: 199.99 },
+|   { title: "To Kill a Mockingbird", author: "Harper Lee", category: "Classic", price: 249.99 },
+|   { title: "The Hobbit", author: "J.R.R. Tolkien", category: "Fantasy", price: 349.99 }
+| ])
+|
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6ac4fa4c34e9b84e5b3ecdb9'),
+    '1': ObjectId('6ac4fa4c34e9b84e5b3ecdba'),
+    '2': ObjectId('6ac4fa4c34e9b84e5b3ecdbb')
+  }
+}
+
+booksDB> db.books.find()
+[
+  {
+    _id: ObjectId('6ac4f90134e9b84e5b3ecdb8'),
+    title: 'The Great Gatsby',
+    author: 'F. Scott Fitxgerald',
+    catagory: 'classic',
+    price: 299.99
+  },
+  {
+    _id: ObjectId('6ac4fa4c34e9b84e5b3ecdb9'),
+    title: '1984',
+    author: 'George Orwell',
+    category: 'Dystopian',
+    price: 199.99
+  },
+  {
+    _id: ObjectId('6ac4fa4c34e9b84e5b3ecdba'),
+    title: 'To Kill a Mockingbird',
+    author: 'Harper Lee',
+    category: 'Classic',
+    price: 249.99
+  },
+  {
+    _id: ObjectId('6ac4fa4c34e9b84e5b3ecdbb'),
+    title: 'The Hobbit',
+    author: 'J.R.R. Tolkien',
+    category: 'Fantasy',
+    price: 349.99
+  }
+]
+
+booksDB>  db.books.find({ category: "Classic" })
+[
+  {
+    _id: ObjectId('6ac4fa4c34e9b84e5b3ecdba'),
+    title: 'To Kill a Mockingbird',
+    author: 'Harper Lee',
+    category: 'Classic',
+    price: 249.99
+  }
+]
+
+booksDB> db.books.deleteOne({ title: "The Hobbit" })
+{ acknowledged: true, deletedCount: 1 }
+
