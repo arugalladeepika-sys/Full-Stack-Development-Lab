@@ -10,11 +10,17 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const cors = require("cors");
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+    origin: [
+        "https://full-stack-development-3gr1d4cuf-csp-ddd1.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"]
 }));
+
+app.use(express.json());
 app.use(morgan("dev"));
 
 const port = process.env.PORT || 3000;
