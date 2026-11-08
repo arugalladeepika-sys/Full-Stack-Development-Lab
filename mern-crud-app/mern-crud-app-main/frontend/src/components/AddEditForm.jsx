@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const API_URL = "https://full-stack-development-lab.onrender.com/";
+
 function AddEditForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ function AddEditForm() {
   useEffect(() => {
     if (id) {
       async function fetchPost() {
-        const response = await fetch(`http://localhost:3000/api/v1/posts/${id}`);
+        const response = await fetch(`${API_URL}/api/v1/posts/${id}`);
         const data = await response.json();
         setTitle(data.data.title);
         setContent(data.data.content);
@@ -23,8 +25,8 @@ function AddEditForm() {
     e.preventDefault();
     const method = id ? "PUT" : "POST";
     const url = id
-      ? `http://localhost:3000/api/v1/posts/${id}`
-      : "http://localhost:3000/api/v1/posts";
+      ? `${API_URL}/api/v1/posts/${id}`
+      : "${API_URL}/api/v1/posts";
     await fetch(url, {
       method,
       headers: {
