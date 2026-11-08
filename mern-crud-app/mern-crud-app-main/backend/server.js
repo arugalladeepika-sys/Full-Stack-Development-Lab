@@ -30,7 +30,7 @@ const connectDB = async () => {
 
         console.log("MongoDB Connected Successfully");
 
-        app.listen(port, () => {
+        app.listen(port,"0.0.0.0", () => {
             console.log(`Server running on port ${port}`);
         });
 
