@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const API_URL = "https://full-stack-development-lab.onrender.com/";
+const API_URL = "https://full-stack-development-lab.onrender.com";
 
 function AddEditForm() {
   const { id } = useParams();
