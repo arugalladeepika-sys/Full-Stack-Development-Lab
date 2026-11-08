@@ -10,7 +10,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use(morgan("dev"));
 
 const port = process.env.PORT || 3000;
@@ -18,10 +22,23 @@ const mongoUri = process.env.MONGO_URI;
 const dbName = process.env.DB_NAME;
 
 // Connect to MongoDB
-mongoose
-  .connect(mongoUri, { dbName })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Failed to connect to MongoDB", err));
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+            dbName: process.env.DB_NAME
+        });
+
+        console.log("MongoDB Connected Successfully");
+
+        app.listen(port, () => {
+            console.log(`Server running on port ${port}`);
+        });
+
+    } catch (error) {
+        console.error("MongoDB Connection Failed:", error.message);
+        process.exit(1);
+    }
+};
 
   // Define the Post schema and model
 const postSchema = new mongoose.Schema({
@@ -99,6 +116,8 @@ app.get("/", (req, res) => {
   res.send({ message: "Welcome to Express Test" });
 });
 //Start the server
-app.listen(port, () => {
+/*app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+*/
+connectDB();
