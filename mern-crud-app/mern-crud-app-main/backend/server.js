@@ -10,8 +10,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const cors = require("cors");
-
 app.use(cors({
     origin: [
         "https://full-stack-development-3gr1d4cuf-csp-ddd1.vercel.app"
